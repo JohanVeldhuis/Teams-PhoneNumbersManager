@@ -31,10 +31,10 @@ Connect-AzureAD -AadAccessToken $aadToken -AccountId $context.Account.Id -Tenant
 
 write-host -ForegroundColor blue "Checking if app '$displayName' is already registered"
 $AAdapp = Get-AzureADApplication -Filter "DisplayName eq '$displayName'"
-If ($AAdapp.Count -gt 1) {
-    Write-Error "Multiple Azure AD app registered under the name '$displayName' - Please use another name and retry"
-    return
+If ($AADapp.Count -gt 0) {
+    Throw "Multiple Azure AD app registered under the name '$displayName' - Please use another name and retry"
 }
+
 If([string]::IsNullOrEmpty($AAdapp)){
     write-host -ForegroundColor blue "Register a new app in Azure AD using Azure Function app name"
     $AADapp = New-AzureADApplication -DisplayName $displayName -AvailableToOtherTenants $false
